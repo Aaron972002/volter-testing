@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calcular - Volter Testing</title>
+  <style>
+    :root{--bg:#f4f7fb;--card:#ffffff;--accent:#3b82f6;--muted:#6b7280}
+    body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:linear-gradient(135deg,var(--bg),#eef2ff);min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{background:var(--card);padding:28px;border-radius:12px;box-shadow:0 6px 20px rgba(15,23,42,0.08);width:360px;max-width:94%}
+    h1{margin:0 0 12px;font-size:20px;color:#0f172a}
+    p.lead{margin:0 0 18px;color:var(--muted);font-size:13px}
+    .row{display:flex;gap:10px;margin-bottom:12px}
+    input[type="number"], select{flex:1;padding:10px;border:1px solid #e6e9ef;border-radius:8px;font-size:14px}
+    .controls{display:flex;gap:8px;margin-top:8px}
+    button{flex:1;padding:10px;border-radius:8px;border:0;font-weight:600;background:var(--accent);color:white;cursor:pointer}
+    button.secondary{background:#e6e9ef;color:#0f172a;font-weight:600}
+    .result{margin-top:14px;padding:12px;border-radius:8px;background:#f8fafc;border:1px dashed #e6e9ef;color:#0f172a;font-weight:700;text-align:center}
+    .small{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
+    footer{margin-top:14px;font-size:12px;color:var(--muted);text-align:center}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <h1>Calculadora simple</h1>
+    <p class="lead">Introduce dos números y selecciona una operación. Diseño estático y funcionalidad en el navegador.</p>
 
+    <div class="row">
+      <input id="a" type="number" placeholder="Número A" aria-label="Número A" />
+      <input id="b" type="number" placeholder="Número B" aria-label="Número B" />
+    </div>
+
+    <div class="row">
+      <select id="op" aria-label="Operación">
+        <option value="add">Sumar (+)</option>
+        <option value="sub">Restar (-)</option>
+        <option value="mul">Multiplicar (×)</option>
+        <option value="div">Dividir (÷)</option>
+        <option value="mod">Módulo (%)</option>
+        <option value="pow">Potencia (^)</option>
+      </select>
+    </div>
+
+    <div class="controls">
+      <button id="calc">Calcular</button>
+      <button id="clear" class="secondary" type="button">Limpiar</button>
+    </div>
+
+    <div id="result" class="result" aria-live="polite">Resultado: —</div>
+    <div class="small">Diseño estático — funciona sin dependencias externas</div>
+    <footer>volter-testing · index.html</footer>
+  </main>
+
+  <script>
+    (function(){
+      const aEl = document.getElementById('a');
+      const bEl = document.getElementById('b');
+      const opEl = document.getElementById('op');
+      const resEl = document.getElementById('result');
+      const calcBtn = document.getElementById('calc');
+      const clearBtn = document.getElementById('clear');
+
+      function formatNumber(n){
+        if (Number.isFinite(n)) return Number(n.toFixed(6)).toString();
+        return String(n);
+      }
+
+      function compute(){
+        const a = parseFloat(aEl.value);
+        const b = parseFloat(bEl.value);
+        const op = opEl.value;
+
+        if (isNaN(a) || isNaN(b)){
+          resEl.textContent = 'Resultado: Por favor introduce ambos números.';
+          return;
+        }
+
+        let out;
+        switch(op){
+          case 'add': out = a + b; break;
+          case 'sub': out = a - b; break;
+          case 'mul': out = a * b; break;
+          case 'div': out = b === 0 ? 'Error: división por 0' : a / b; break;
+          case 'mod': out = b === 0 ? 'Error: módulo por 0' : a % b; break;
+          case 'pow': out = Math.pow(a,b); break;
+          default: out = 'Operación desconocida';
+        }
+
+        resEl.textContent = 'Resultado: ' + (typeof out === 'number' ? formatNumber(out) : out);
+      }
+
+      calcBtn.addEventListener('click', compute);
+      clearBtn.addEventListener('click', function(){
+        aEl.value = '';
+        bEl.value = '';
+        opEl.value = 'add';
+        resEl.textContent = 'Resultado: —';
+      });
+
+      // allow Enter key to calculate when focus is on inputs
+      [aEl,bEl].forEach(el => el.addEventListener('keydown', function(e){ if (e.key === 'Enter') compute(); }));
+    })();
+  </script>
+</body>
+</html>
