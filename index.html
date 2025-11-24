@@ -1,105 +1,297 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Calcular - Volter Testing</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Volter — Beautiful Minimal Product</title>
+  <meta name="description" content="Volter — a premium minimal single-file landing page demo with hero, features, and call-to-action." />
   <style>
-    :root{--bg:#f4f7fb;--card:#ffffff;--accent:#3b82f6;--muted:#6b7280}
-    body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:linear-gradient(135deg,var(--bg),#eef2ff);min-height:100vh;display:flex;align-items:center;justify-content:center}
-    .card{background:var(--card);padding:28px;border-radius:12px;box-shadow:0 6px 20px rgba(15,23,42,0.08);width:360px;max-width:94%}
-    h1{margin:0 0 12px;font-size:20px;color:#0f172a}
-    p.lead{margin:0 0 18px;color:var(--muted);font-size:13px}
-    .row{display:flex;gap:10px;margin-bottom:12px}
-    input[type="number"], select{flex:1;padding:10px;border:1px solid #e6e9ef;border-radius:8px;font-size:14px}
-    .controls{display:flex;gap:8px;margin-top:8px}
-    button{flex:1;padding:10px;border-radius:8px;border:0;font-weight:600;background:var(--accent);color:white;cursor:pointer}
-    button.secondary{background:#e6e9ef;color:#0f172a;font-weight:600}
-    .result{margin-top:14px;padding:12px;border-radius:8px;background:#f8fafc;border:1px dashed #e6e9ef;color:#0f172a;font-weight:700;text-align:center}
-    .small{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
-    footer{margin-top:14px;font-size:12px;color:var(--muted);text-align:center}
+    :root{
+      --bg:#fbfcfd;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#0ea5a1;
+      --accent-2:#6366f1;
+      --glass: rgba(255,255,255,0.6);
+      --radius:14px;
+      --shadow: 0 6px 30px rgba(16,24,40,0.06);
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      font-size:16px;
+      padding:32px 24px;
+      display:flex;
+      justify-content:center;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:1100px;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:28px;
+    }
+
+    .brand{
+      display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit
+    }
+    .logo{
+      width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 6px 18px rgba(99,102,241,0.12);color:white;font-weight:700;font-size:18px
+    }
+
+    nav{display:flex;gap:18px;align-items:center}
+    .nav-links{display:flex;gap:14px}
+    a.btn{display:inline-flex;align-items:center;gap:10px;background:transparent;border:1px solid transparent;padding:10px 14px;border-radius:10px;text-decoration:none;color:var(--muted);font-weight:600}
+    a.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;box-shadow:var(--shadow)}
+
+    /* Mobile nav */
+    .menu-toggle{display:none;background:transparent;border:0;padding:8px;border-radius:8px}
+
+    main{background:transparent}
+
+    .hero{
+      display:grid;grid-template-columns:1fr 440px;gap:40px;align-items:center;padding:48px;border-radius:var(--radius);background:linear-gradient(180deg, rgba(99,102,241,0.04), rgba(14,165,161,0.02));box-shadow:var(--shadow);
+    }
+
+    .kicker{display:inline-block;background:linear-gradient(90deg,rgba(99,102,241,0.12),rgba(14,165,161,0.06));color:var(--accent-2);padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;margin-bottom:18px}
+    h1{font-size:40px;line-height:1.02;margin:0 0 14px}
+    p.lead{color:var(--muted);margin:0 0 22px}
+
+    .actions{display:flex;gap:12px;flex-wrap:wrap}
+
+    /* Mock product card */
+    .card-preview{
+      background:linear-gradient(180deg,#fff,#fbfdff);
+      border-radius:16px;padding:18px;box-shadow:0 10px 30px rgba(16,24,40,0.08);border:1px solid rgba(15,23,42,0.03)
+    }
+
+    .features{
+      margin-top:42px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px
+    }
+
+    .feature{background:var(--card);border-radius:14px;padding:18px;box-shadow:var(--shadow);border:1px solid rgba(15,23,42,0.03);display:flex;gap:12px;align-items:flex-start}
+    .feature svg{flex-shrink:0}
+    .feature h3{margin:0;font-size:16px}
+    .feature p{margin:6px 0 0;color:var(--muted);font-size:14px}
+
+    .cta{
+      margin-top:48px;padding:36px;border-radius:14px;background:linear-gradient(90deg,rgba(14,165,161,0.04),rgba(99,102,241,0.03));display:flex;align-items:center;justify-content:space-between;gap:20px
+    }
+    .cta .left{max-width:70%}
+    .cta h3{margin:0 0 6px}
+    .cta p{margin:0;color:var(--muted)}
+
+    .cta form{display:flex;gap:10px}
+    .input{background:white;border-radius:12px;padding:10px 12px;border:1px solid rgba(15,23,42,0.05);min-width:200px}
+    .submit{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;border:0;padding:10px 14px;border-radius:10px;font-weight:700}
+
+    footer{margin-top:36px;color:var(--muted);font-size:14px;text-align:center}
+
+    /* Responsive */
+    @media (max-width:920px){
+      .hero{grid-template-columns:1fr;}
+      .features{grid-template-columns:repeat(2,1fr)}
+      .cta{flex-direction:column;align-items:flex-start}
+      .cta .left{max-width:100%}
+    }
+    @media (max-width:640px){
+      body{padding:20px}
+      header{gap:10px}
+      .nav-links{display:none}
+      .menu-toggle{display:inline-flex}
+      .features{grid-template-columns:1fr}
+      h1{font-size:28px}
+      .hero{padding:22px}
+      .card-preview{display:none}
+    }
+
+    /* reveal animations */
+    .reveal{opacity:0;transform:translateY(12px) scale(0.998);transition:opacity 600ms cubic-bezier(.2,.9,.2,1),transform 600ms cubic-bezier(.2,.9,.2,1)}
+    .reveal.in-view{opacity:1;transform:none}
+
+    /* small helpers */
+    .muted{color:var(--muted);font-size:13px}
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .reveal{transition:none}
+      *{animation-duration:0.001ms !important;animation-iteration-count:1 !important}
+    }
   </style>
 </head>
 <body>
-  <main class="card" role="main">
-    <h1>Calculadora simple</h1>
-    <p class="lead">Introduce dos números y selecciona una operación. Diseño estático y funcionalidad en el navegador.</p>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="#">
+        <div class="logo">V</div>
+        <div>
+          <div style="font-weight:700">Volter</div>
+          <div class="muted" style="margin-top:2px;font-size:12px">Minimal product demo</div>
+        </div>
+      </a>
 
-    <div class="row">
-      <input id="a" type="number" placeholder="Número A" aria-label="Número A" />
-      <input id="b" type="number" placeholder="Número B" aria-label="Número B" />
-    </div>
+      <nav>
+        <div class="nav-links">
+          <a class="btn" href="#features">Features</a>
+          <a class="btn" href="#pricing">Pricing</a>
+          <a class="btn" href="#contact">Contact</a>
+        </div>
+        <button class="menu-toggle" aria-label="Open menu" id="menuToggle">☰</button>
+        <a class="btn primary" href="#get-started">Get Started</a>
+      </nav>
+    </header>
 
-    <div class="row">
-      <select id="op" aria-label="Operación">
-        <option value="add">Sumar (+)</option>
-        <option value="sub">Restar (-)</option>
-        <option value="mul">Multiplicar (×)</option>
-        <option value="div">Dividir (÷)</option>
-        <option value="mod">Módulo (%)</option>
-        <option value="pow">Potencia (^)</option>
-      </select>
-    </div>
+    <main>
+      <section class="hero">
+        <div>
+          <div class="kicker reveal">New — Delightfully Minimal</div>
+          <h1 class="reveal">Beautifully crafted interfaces that feel premium — without the clutter.</h1>
+          <p class="lead reveal">Volter is a minimal landing demo built as a single file: fast, accessible, and easy to customize. Focus on product, not setup.</p>
 
-    <div class="controls">
-      <button id="calc">Calcular</button>
-      <button id="clear" class="secondary" type="button">Limpiar</button>
-    </div>
+          <div class="actions reveal">
+            <a href="#get-started" class="btn primary">Get Started</a>
+            <a href="#features" class="btn">Explore features</a>
+          </div>
 
-    <div id="result" class="result" aria-live="polite">Resultado: —</div>
-    <div class="small">Diseño estático — funciona sin dependencias externas</div>
-    <footer>volter-testing · index.html</footer>
-  </main>
+          <div class="features" id="features" style="margin-top:28px">
+            <article class="feature reveal">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="url(#g1)"/><path d="M8 12l2 2 4-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div>
+                <h3>Polished UI</h3>
+                <p>Clean components, consistent spacing, and delightful micro-interactions.</p>
+              </div>
+            </article>
+
+            <article class="feature reveal">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="url(#g2)"/><path d="M12 6v6l3 3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div>
+                <h3>Fast & Lightweight</h3>
+                <p>Single-file delivery with no external dependencies keeps load times tiny.</p>
+              </div>
+            </article>
+
+            <article class="feature reveal">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="url(#g3)"/><path d="M8 12h8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div>
+                <h3>Responsive</h3>
+                <p>Layouts gracefully adapt from large displays to mobile without compromise.</p>
+              </div>
+            </article>
+          </div>
+
+        </div>
+
+        <aside class="card-preview reveal" aria-hidden="true">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+            <div style="font-weight:700">Volter App</div>
+            <div class="muted">v1.0</div>
+          </div>
+          <div style="height:220px;border-radius:12px;background:linear-gradient(180deg,#f8fbff,#ffffff);display:flex;flex-direction:column;padding:16px;gap:12px">
+            <div style="height:38px;border-radius:8px;background:linear-gradient(90deg,#eef2ff,#fff)"></div>
+            <div style="flex:1;border-radius:8px;background:linear-gradient(90deg,#fff,#f8fffd)"></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="cta" id="get-started">
+        <div class="left">
+          <h3 class="reveal">Ready to ship something beautiful?</h3>
+          <p class="reveal">Start with a lightweight foundation that scales — tweak styles, drop in assets, and go live in minutes.</p>
+        </div>
+        <form onsubmit="event.preventDefault();subscribe();" class="reveal" id="subscribeForm">
+          <input class="input" id="email" type="email" placeholder="Your email" aria-label="Email address" required />
+          <button class="submit" type="submit">Get early access</button>
+        </form>
+      </section>
+
+      <footer id="contact">
+        <div class="muted">© "Volter" — Built with care. No tracking, just vibes.</div>
+      </footer>
+    </main>
+  </div>
 
   <script>
+    // Minimal JS: menu toggle, reveal on scroll, and tiny subscribe feedback
     (function(){
-      const aEl = document.getElementById('a');
-      const bEl = document.getElementById('b');
-      const opEl = document.getElementById('op');
-      const resEl = document.getElementById('result');
-      const calcBtn = document.getElementById('calc');
-      const clearBtn = document.getElementById('clear');
-
-      function formatNumber(n){
-        if (Number.isFinite(n)) return Number(n.toFixed(6)).toString();
-        return String(n);
+      const toggle = document.getElementById('menuToggle');
+      const navLinks = document.querySelector('.nav-links');
+      if(toggle){
+        toggle.addEventListener('click', ()=>{
+          const shown = navLinks.style.display === 'flex';
+          navLinks.style.display = shown ? 'none' : 'flex';
+        });
       }
 
-      function compute(){
-        const a = parseFloat(aEl.value);
-        const b = parseFloat(bEl.value);
-        const op = opEl.value;
-
-        if (isNaN(a) || isNaN(b)){
-          resEl.textContent = 'Resultado: Por favor introduce ambos números.';
-          return;
-        }
-
-        let out;
-        switch(op){
-          case 'add': out = a + b; break;
-          case 'sub': out = a - b; break;
-          case 'mul': out = a * b; break;
-          case 'div': out = b === 0 ? 'Error: división por 0' : a / b; break;
-          case 'mod': out = b === 0 ? 'Error: módulo por 0' : a % b; break;
-          case 'pow': out = Math.pow(a,b); break;
-          default: out = 'Operación desconocida';
-        }
-
-        resEl.textContent = 'Resultado: ' + (typeof out === 'number' ? formatNumber(out) : out);
+      // Intersection Observer for reveal animations
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!prefersReduced && 'IntersectionObserver' in window){
+        const io = new IntersectionObserver((entries)=>{
+          entries.forEach(e=>{
+            if(e.isIntersecting) e.target.classList.add('in-view');
+          });
+        },{threshold:0.12});
+        document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+      } else {
+        // fallback: reveal everything
+        document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in-view'));
       }
 
-      calcBtn.addEventListener('click', compute);
-      clearBtn.addEventListener('click', function(){
-        aEl.value = '';
-        bEl.value = '';
-        opEl.value = 'add';
-        resEl.textContent = 'Resultado: —';
+      // Smooth scrolling for anchors
+      document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click', (e)=>{
+          const href = a.getAttribute('href');
+          if(href.length>1){
+            e.preventDefault();
+            document.querySelector(href).scrollIntoView({behavior:'smooth',block:'start'});
+          }
+        });
       });
 
-      // allow Enter key to calculate when focus is on inputs
-      [aEl,bEl].forEach(el => el.addEventListener('keydown', function(e){ if (e.key === 'Enter') compute(); }));
+      window.subscribe = function(){
+        const btn = document.querySelector('.submit');
+        const email = document.getElementById('email');
+        if(!email.checkValidity()){
+          email.reportValidity();
+          return;
+        }
+        btn.disabled = true; btn.textContent = 'Sending...';
+        setTimeout(()=>{btn.textContent='Thanks — check your inbox'; btn.style.cursor='default';},800);
+      };
+
     })();
   </script>
+
+  <!-- SVG gradients used in feature icons -->
+  <svg width="0" height="0" style="position:absolute;left:-9999px;">
+    <defs>
+      <linearGradient id="g1" x1="0" x2="1">
+        <stop offset="0%" stop-color="#34d399" />
+        <stop offset="100%" stop-color="#60a5fa" />
+      </linearGradient>
+      <linearGradient id="g2" x1="0" x2="1">
+        <stop offset="0%" stop-color="#f59e0b" />
+        <stop offset="100%" stop-color="#ef4444" />
+      </linearGradient>
+      <linearGradient id="g3" x1="0" x2="1">
+        <stop offset="0%" stop-color="#06b6d4" />
+        <stop offset="100%" stop-color="#6366f1" />
+      </linearGradient>
+    </defs>
+  </svg>
 </body>
 </html>
